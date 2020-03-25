@@ -28,7 +28,7 @@ public class BookControllerTest {
     * */
     @Test
     public void sampleEndpointTest() throws Exception {
-        ResultActions result = bookControllerMock.perform(MockMvcRequestBuilders.get("/books/sample1"));
+        ResultActions result = bookControllerMock.perform(MockMvcRequestBuilders.get("/books/sample"));
         result.andExpect(status().isOk());
     }
 }
