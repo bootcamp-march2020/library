@@ -9,7 +9,7 @@ public class BookController {
 
     @RequestMapping("/sample")
     public String sampleEndpoint() {
-        return "Welcome"
+        return "Welcome";
     }
 
 }
