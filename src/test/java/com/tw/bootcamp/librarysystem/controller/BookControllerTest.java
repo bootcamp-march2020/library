@@ -23,6 +23,9 @@ public class BookControllerTest {
     @Autowired
     private MockMvc bookControllerMock;
 
+    /*
+    * A sample test method for Book Controller
+    * */
     @Test
     public void sampleEndpointTest() throws Exception {
         ResultActions result = bookControllerMock.perform(MockMvcRequestBuilders.get("/books/sample"));
