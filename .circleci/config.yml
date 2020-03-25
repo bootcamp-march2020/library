@@ -51,4 +51,4 @@ jobs:
       - store_test_results:
            path: ~/test-results
       - store_artifacts:
-           path: ~/libs/library-system-0.0.1-SNAPSHOT.jar
+           path: build/libs/library-system-0.0.1-SNAPSHOT.jar
