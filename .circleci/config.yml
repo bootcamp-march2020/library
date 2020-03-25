@@ -83,6 +83,7 @@ jobs:
 
       # Saves tests results
       - run:
+          halt_build_on_fail: true
           name: Saves tests results
           command: |
             mkdir -p ~/test-results/junit/
