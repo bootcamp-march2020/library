@@ -91,7 +91,6 @@ jobs:
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-      - image: your/image_for_primary_container
       - image: postgres:9.6.2-alpine
         environment:
           POSTGRES_USER: postgres
