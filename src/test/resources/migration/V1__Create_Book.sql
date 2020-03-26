@@ -1,1 +1,1 @@
-CREATE TABLE book(id INT PRIMARY KEY, bookName VARCHAR (50) UNIQUE NOT NULL, coverPicture VARCHAR (50), releaseDate DATE, author VARCHAR (50));
+CREATE TABLE book(id INT auto_increment PRIMARY KEY, bookName VARCHAR (50) UNIQUE NOT NULL, coverPicture VARCHAR (50), releaseDate DATE, author VARCHAR (50));

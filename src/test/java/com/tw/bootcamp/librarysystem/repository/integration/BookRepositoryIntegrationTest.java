@@ -8,12 +8,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.junit.Assert.assertEquals;
 
 @DataJpaTest
-public class BookRepositoryTest {
+public class BookRepositoryIntegrationTest {
     @Autowired
     private BookRepository bookRepository;
 
     @Test
-    public void test() {
+    public void findAllTest() {
         assertEquals(1, bookRepository.findAll().size());
+
     }
 }
