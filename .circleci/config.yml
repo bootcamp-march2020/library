@@ -26,7 +26,7 @@ jobs:
         - run: |
             psql \
             -d $TEST_DATABASE_URL \
-            -c "CREATE TABLE account(
+            -c "CREATE TABLE books(
                    id serial PRIMARY KEY,
                    bookname VARCHAR (200) UNIQUE NOT NULL,
                    coverpicture VARCHAR (200) NOT NULL,
