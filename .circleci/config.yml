@@ -85,7 +85,6 @@ jobs:
           command: gradle build -x test
   test:
     docker:
-      # specify the version you desire here
       - image: circleci/openjdk:8-jdk
 
       # Specify service dependencies here if necessary
@@ -100,14 +99,14 @@ jobs:
         JVM_OPTS: -Xmx3200m
         TERM: dumb
 
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-      - image: postgres:9.6.2-alpine
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: libmanangment
+        # Specify service dependencies here if necessary
+        # CircleCI maintains a library of pre-built images
+        # documented at https://circleci.com/docs/2.0/circleci-images/
+        # - image: circleci/postgres:9.4
+        - image: postgres:9.6.2-alpine
+          environment:
+            POSTGRES_USER: postgres
+            POSTGRES_DB: libmanangment
 
       steps:
         - checkout
