@@ -5,9 +5,6 @@
 version: 2
 jobs:
   setupdb:
-    docker:
-      # Primary container image where all commands run
-
       docker:
         - image: circleci/python:3.6.2-stretch-browsers
           environment:
