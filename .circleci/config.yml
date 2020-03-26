@@ -5,45 +5,45 @@
 version: 2
 jobs:
   setupdb:
-      docker:
-        - image: circleci/openjdk:8-jdk
-          environment:
-            TEST_DATABASE_URL: postgresql://postgres@localhost/libmanangment
+    docker:
+      - image: circleci/openjdk:8-jdk
+        environment:
+          TEST_DATABASE_URL: postgresql://postgres@localhost/libmanangment
 
-        # Service container image
+      # Service container image
 
-        - image: circleci/postgres:9.6.5-alpine-ram
-          environment:
-            POSTGRES_USER: postgres
-            POSTGRES_DB: libmanangment
+      - image: circleci/postgres:9.6.5-alpine-ram
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: libmanangment
 
-      steps:
-        - checkout
-        - run: sudo apt-get update
-        - run: sudo apt-get install postgresql-client-9.6
-        - run: whoami
-        - run: |
-            psql \
-            -d $TEST_DATABASE_URL \
-            -c "CREATE TABLE books(
-                   id serial PRIMARY KEY,
-                   bookname VARCHAR (200) UNIQUE NOT NULL,
-                   coverpicture VARCHAR (200) NOT NULL,
-                   releasedate DATE NOT NULL,
-                   author VARCHAR (100) NOT NULL
-                );"
-        - run: |
-            psql \
-            -d $TEST_DATABASE_URL \
-            -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
-                VALUES ('Android in Action, Second Edition', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson2.jpg',
-                 '2011-01-14','Robi Sen');"
-        - run: |
-            psql \
-            -d $TEST_DATABASE_URL \
-            -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
-                VALUES ('Unlocking Android', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson.jpg',
-                 '2001-07-13','Charlie Collins');"
+    steps:
+      - checkout
+      - run: sudo apt-get update
+      - run: sudo apt-get install postgresql-client-9.6
+      - run: whoami
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "CREATE TABLE books(
+                 id serial PRIMARY KEY,
+                 bookname VARCHAR (200) UNIQUE NOT NULL,
+                 coverpicture VARCHAR (200) NOT NULL,
+                 releasedate DATE NOT NULL,
+                 author VARCHAR (100) NOT NULL
+              );"
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
+              VALUES ('Android in Action, Second Edition', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson2.jpg',
+               '2011-01-14','Robi Sen');"
+      - run: |
+          psql \
+          -d $TEST_DATABASE_URL \
+          -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
+              VALUES ('Unlocking Android', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson.jpg',
+               '2001-07-13','Charlie Collins');"
 
   build:
     docker:
@@ -92,6 +92,47 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
+      - image: postgres:9.6.2-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: libmanangment
+
+      steps:
+        - checkout
+        - run:
+            name: install dockerize
+            command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+            environment:
+              DOCKERIZE_VERSION: v0.3.0
+        - run:
+            name: Wait for db
+            command: dockerize -wait tcp://localhost:5432 -timeout 1m
+        - run: sudo apt-get update
+        - run: sudo apt-get install postgresql-client-9.6
+        - run: whoami
+        - run: |
+            psql \
+                      -d $TEST_DATABASE_URL \
+                      -c "CREATE TABLE books(
+                             id serial PRIMARY KEY,
+                             bookname VARCHAR (200) UNIQUE NOT NULL,
+                             coverpicture VARCHAR (200) NOT NULL,
+                             releasedate DATE NOT NULL,
+                             author VARCHAR (100) NOT NULL
+                          );"
+        - run: |
+            psql \
+            -d $TEST_DATABASE_URL \
+            -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
+                VALUES ('Android in Action, Second Edition', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson2.jpg',
+                 '2011-01-14','Robi Sen');"
+        - run: |
+            psql \
+            -d $TEST_DATABASE_URL \
+            -c "INSERT INTO books (bookname,coverpicture,releasedate,author)
+                VALUES ('Unlocking Android', 'https://s3.amazonaws.com/AKIAJC5RLADLUMVRPFDQ.book-thumb-images/ableson.jpg',
+                 '2001-07-13','Charlie Collins');"
+
 
     working_directory: ~/repo
 
