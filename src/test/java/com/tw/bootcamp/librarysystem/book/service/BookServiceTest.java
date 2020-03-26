@@ -1,7 +1,7 @@
-package com.tw.bootcamp.librarysystem.service;
+package com.tw.bootcamp.librarysystem.book.service;
 
-import com.tw.bootcamp.librarysystem.model.Book;
-import com.tw.bootcamp.librarysystem.repository.BookRepository;
+import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;

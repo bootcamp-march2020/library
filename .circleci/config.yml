@@ -4,7 +4,7 @@
 #
 version: 2
 jobs:
-  build:
+  compile:
     docker:
       # specify the version you desire here
       - image: circleci/openjdk:8-jdk
@@ -110,7 +110,7 @@ workflows:
   version: 2
   build-and-test:
     jobs:
-      - build
+      - compile
       - test:
           requires:
-            - build
+            - compile

@@ -1,6 +1,6 @@
-package com.tw.bootcamp.librarysystem.repository.integration;
+package com.tw.bootcamp.librarysystem.book.repository.integration;
 
-import com.tw.bootcamp.librarysystem.repository.BookRepository;
+import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

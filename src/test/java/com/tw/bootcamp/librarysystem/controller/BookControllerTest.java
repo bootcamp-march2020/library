@@ -1,7 +1,8 @@
 package com.tw.bootcamp.librarysystem.controller;
 
-import com.tw.bootcamp.librarysystem.model.Book;
-import com.tw.bootcamp.librarysystem.service.BookService;
+import com.tw.bootcamp.librarysystem.book.controller.BookController;
+import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.service.BookService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class BookControllerTest {
                 .willReturn(Arrays.asList(someBook));
 
 
-        bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/book"))
+        bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
                 .andExpect(jsonPath("$[0].bookName").value("android"));

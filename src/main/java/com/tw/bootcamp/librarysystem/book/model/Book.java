@@ -1,4 +1,4 @@
-package com.tw.bootcamp.librarysystem.model;
+package com.tw.bootcamp.librarysystem.book.model;
 
 import javax.persistence.*;
 import java.util.Date;

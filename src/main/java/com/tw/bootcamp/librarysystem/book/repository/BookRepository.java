@@ -1,6 +1,6 @@
-package com.tw.bootcamp.librarysystem.repository;
+package com.tw.bootcamp.librarysystem.book.repository;
 
-import com.tw.bootcamp.librarysystem.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
