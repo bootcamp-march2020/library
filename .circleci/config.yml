@@ -2,7 +2,23 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+version: 2.1
+orbs:
+  heroku: circleci/heroku@0.0.10. # Invoke the Heroku orb
+
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+      - heroku/deploy-via-git:
+          type: approval
+          requires:
+            - build
+
 jobs:
   build:
     docker:
@@ -105,21 +121,3 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
-  deploy:
-    steps:
-      - checkout
-      - run:
-          name: Deploy Master to Heroku
-          command: |
-            git push https://heroku:$355-896-3233@git.heroku.com/libarary-deployment.git master
-workflows:
-  version: 2
-  test-and-build:
-    jobs:
-      - test
-      - build:
-          requires:
-            - test
-      - deploy:
-          requires:
-            - build
