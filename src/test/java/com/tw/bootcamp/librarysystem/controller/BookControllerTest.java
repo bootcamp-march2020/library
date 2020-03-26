@@ -10,11 +10,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import static org.hamcrest.Matchers.*;
 
 import java.util.Arrays;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,9 +37,9 @@ public class BookControllerTest {
                 .willReturn(Arrays.asList(someBook));
 
 
-         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/book"))
-                 .andExpect(status().isOk())
-                 .andExpect(jsonPath("$[0].id", is(1)))
-                 .andExpect(jsonPath("$[0].bookName").value("android"));
+        bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/book"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].bookName").value("android"));
     }
 }
