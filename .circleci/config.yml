@@ -2,22 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2.1
-orbs:
-  heroku: circleci/heroku@1.0.1 # Invoke the Heroku orb
-
-workflows:
-  version: 2
-  test-build-deploy:
-    jobs:
-      - test
-      - build:
-          requires:
-            - test
-      - heroku/deploy-via-git:
-          type: approval
-          requires:
-            - build
+version: 2.0
 
 jobs:
   build:
@@ -121,3 +106,32 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
+  deploy:
+    machine:
+      enabled: true
+    working_directory: ~/repo
+    environment:
+      HEROKU_APP: "library-bootcamp"
+    steps:
+      - checkout
+      - run:
+          name: Setup Heroku
+          command: bash .circleci/setup-heroku.sh
+
+      - run:
+          command: |
+            git push heroku master
+
+
+workflows:
+  version: 2
+  test-build-deploy:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test
+      - deploy:
+          type: approval
+          requires:
+            - build
