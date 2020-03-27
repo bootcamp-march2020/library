@@ -87,7 +87,7 @@ public class BookControllerTest {
                 .willThrow(new BookNotFoundException());
 
         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/1222"))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("Book Id requested is not present.")));
 
     }
