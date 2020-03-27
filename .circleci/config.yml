@@ -2,7 +2,8 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-version: 2
+version: 2.0
+
 jobs:
   build:
     docker:
@@ -42,6 +43,8 @@ jobs:
       - run:
           name: Build Project
           command: gradle build -x test
+      - store_artifacts:
+          path: build/libs/library-system-0.0.1-SNAPSHOT.jar
   test:
     docker:
       # specify the version you desire here
@@ -90,8 +93,8 @@ jobs:
 
       # run build!
       - run:
-          name: Build Project
-          command: gradle build
+          name: Run Test
+          command: gradle test
 
       # Saves tests results
       - run:
@@ -103,14 +106,29 @@ jobs:
           when: always
       - store_test_results:
           path: ~/test-results
-      - store_artifacts:
-          path: build/libs/library-system-0.0.1-SNAPSHOT.jar
+  deploy:
+    docker:
+      - image: circleci/python:3.6.2-stretch-browsers
+    steps:
+      - checkout
+      - run:
+          name: Deploy Master to Heroku
+          command: |
+            git push https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_NAME.git master
+
 
 workflows:
   version: 2
-  build-and-test:
+  test-build-deploy:
     jobs:
-      - build
-      - test:
+      - test
+      - build:
+          requires:
+            - test
+      - hold:
+          type: approval
           requires:
             - build
+      - deploy:
+          requires:
+            - hold

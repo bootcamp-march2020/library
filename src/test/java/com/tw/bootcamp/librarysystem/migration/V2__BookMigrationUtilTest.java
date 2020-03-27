@@ -1,6 +1,6 @@
 package com.tw.bootcamp.librarysystem.migration;
 
-import com.tw.bootcamp.librarysystem.repository.BookRepository;
+import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import db.migration.V2__BookMigrationUtil;
 import org.flywaydb.core.api.migration.Context;
 import org.junit.Assert;
@@ -64,6 +64,7 @@ public class V2__BookMigrationUtilTest {
         Assert.assertTrue(bookNames.contains("Book2"));
     }
 
+    @SuppressWarnings("unchecked")
     private List<Map<String, Object>> getSampleBooks() {
         List<Map<String, Object>> books = new ArrayList<>();
         Map<String, Object> book1 = new HashMap<>();
