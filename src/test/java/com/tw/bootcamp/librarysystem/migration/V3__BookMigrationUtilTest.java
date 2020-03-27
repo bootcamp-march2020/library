@@ -57,7 +57,7 @@ public class V3__BookMigrationUtilTest {
                 .thenReturn(ResponseEntity.accepted().body(sampleBooks));
 
         bookMigrationUtil.migrate(mockFlywayContext);
-        List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getName()).collect(Collectors.toList());
+        List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getBookName()).collect(Collectors.toList());
         Assert.assertTrue(bookNames.contains("Book1"));
         Assert.assertTrue(bookNames.contains("Book2"));
     }

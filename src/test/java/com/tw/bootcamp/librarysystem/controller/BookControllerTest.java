@@ -35,7 +35,7 @@ public class BookControllerTest {
     public void testGetBooksEndpoint() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setName("android");
+        someBook.setBookName("android");
         given(bookService.getBooks())
                 .willReturn(Arrays.asList(someBook));
 
@@ -51,7 +51,7 @@ public class BookControllerTest {
     public void testSearchBooksEndpoint() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setName("android");
+        someBook.setBookName("android");
         given(bookService.searchBooks(any(), any(), any()))
                 .willReturn(Arrays.asList(someBook));
 
