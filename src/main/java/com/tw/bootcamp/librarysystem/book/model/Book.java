@@ -12,8 +12,8 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "bookname")
+    private String bookName;
 
     @Column(name = "coverpicture")
     private String coverPicture;
@@ -66,12 +66,12 @@ public class Book {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getBookName() {
+        return bookName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setBookName(String bookName) {
+        this.bookName = bookName;
     }
 
     public String getShortDescription() {

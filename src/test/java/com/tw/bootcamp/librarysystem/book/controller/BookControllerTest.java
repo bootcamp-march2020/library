@@ -38,7 +38,7 @@ public class BookControllerTest {
     public void testGetBooksEndpoint() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setName("android");
+        someBook.setBookName("android");
         given(bookService.getBooks())
                 .willReturn(Arrays.asList(someBook));
 
@@ -66,7 +66,7 @@ public class BookControllerTest {
 
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setName("Android in Action, Second Edition");
+        someBook.setBookName("Android in Action, Second Edition");
         someBook.setReleaseDate(expectedReleaseDate);
         someBook.setAuthor("W. Frank Ableson");
 
@@ -75,7 +75,7 @@ public class BookControllerTest {
 
         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("name", is("Android in Action, Second Edition")))
+                .andExpect(jsonPath("bookName", is("Android in Action, Second Edition")))
                 .andExpect(jsonPath("author", is("W. Frank Ableson")))
                 .andExpect(jsonPath("releaseDate", is(expectedDateString)));
 
