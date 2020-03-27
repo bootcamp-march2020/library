@@ -1,5 +1,7 @@
 package com.tw.bootcamp.librarysystem.book.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,13 +12,14 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    @Column(name = "bookname")
-    private String bookName;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "coverpicture")
     private String coverPicture;
 
     @Column(name = "releasedate")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm'Z'")
     private Date releaseDate;
 
     @Column(name = "author")
@@ -63,12 +66,12 @@ public class Book {
         this.id = id;
     }
 
-    public String getBookName() {
-        return bookName;
+    public String getName() {
+        return name;
     }
 
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getShortDescription() {

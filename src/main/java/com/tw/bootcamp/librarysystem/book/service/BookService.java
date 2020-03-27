@@ -1,5 +1,6 @@
 package com.tw.bootcamp.librarysystem.book.service;
 
+import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -16,5 +17,9 @@ public class BookService {
 
     public List<Book> getBooks() {
         return bookRepository.findAll();
+    }
+
+    public Book getBookDetail(Integer id) {
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException());
     }
 }

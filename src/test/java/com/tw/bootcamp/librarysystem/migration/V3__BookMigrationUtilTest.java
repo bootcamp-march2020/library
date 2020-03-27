@@ -52,11 +52,12 @@ public class V3__BookMigrationUtilTest {
 
         when(mockFlywayContext.getConnection()).thenReturn(testDBConnection);
         when(mockRestTemplate.exchange(anyString(), Mockito.eq(HttpMethod.GET),
-                Mockito.eq(null), Mockito.eq(new ParameterizedTypeReference<List>() {})))
+                Mockito.eq(null), Mockito.eq(new ParameterizedTypeReference<List>() {
+                })))
                 .thenReturn(ResponseEntity.accepted().body(sampleBooks));
 
         bookMigrationUtil.migrate(mockFlywayContext);
-        List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getBookName()).collect(Collectors.toList());
+        List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getName()).collect(Collectors.toList());
         Assert.assertTrue(bookNames.contains("Book1"));
         Assert.assertTrue(bookNames.contains("Book2"));
     }
@@ -69,10 +70,10 @@ public class V3__BookMigrationUtilTest {
         book1.put("thumbnailUrl", "Book1Thumbnail");
         book1.put("isbn", "123456789");
         book1.put("shortDescription", "shortdescription");
-        book1.put("authors",Arrays.asList("author1"));
+        book1.put("authors", Arrays.asList("author1"));
         book1.put("publishedDate", new HashMap<String, String>());
-        book1.put("category",Arrays.asList("action","drama"));
-        ((Map)book1.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
+        book1.put("category", Arrays.asList("action", "drama"));
+        ((Map) book1.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
         books.add(book1);
 
         Map<String, Object> book2 = new HashMap<>();
@@ -80,10 +81,10 @@ public class V3__BookMigrationUtilTest {
         book2.put("isbn", "23455678");
         book2.put("shortDescription", "BookShortDescription");
         book2.put("thumbnailUrl", "Book2Thumbnail");
-        book2.put("authors",Arrays.asList("author2","author3"));
-        book2.put("category",Arrays.asList("fiction","horror"));
+        book2.put("authors", Arrays.asList("author2", "author3"));
+        book2.put("category", Arrays.asList("fiction", "horror"));
         book2.put("publishedDate", new HashMap<String, String>());
-        ((Map)book2.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
+        ((Map) book2.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
         books.add(book2);
         return books;
     }
