@@ -17,19 +17,22 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class V2__BookMigrationUtil extends BaseJavaMigration {
+public class V3__BookMigrationUtil extends BaseJavaMigration {
 
     private static final String BOOK_NAME = "BookName";
     private static final String BOOK_AUTHOR = "BookAuthor";
     private static final String BOOK_PUBLISHED_DATE = "BookPublishedDate";
     private static final String BOOK_THUMBNAIL_URL = "BookThumbnailUrl";
+    private static final String BOOK_SHORT_DESCRIPTION = "BookShortDescription";
+    private static final String BOOK_ISBN = "BookIsbn";
+    private static final String BOOK_CATEGORY = "Bookcategory";
     private RestTemplate restTemplate;
 
-    public V2__BookMigrationUtil() {
+    public V3__BookMigrationUtil() {
         this.restTemplate = new RestTemplate();
     }
 
-    public V2__BookMigrationUtil(RestTemplate restTemplate) {
+    public V3__BookMigrationUtil(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -49,6 +52,10 @@ public class V2__BookMigrationUtil extends BaseJavaMigration {
                 String author = book.get(BOOK_AUTHOR);
                 String coverPicture = book.get(BOOK_THUMBNAIL_URL);
                 String releaseDateString = book.get(BOOK_PUBLISHED_DATE);
+                String category = book.get(BOOK_CATEGORY);
+                String shortDescription = book.get(BOOK_SHORT_DESCRIPTION);
+                String isbn = book.get(BOOK_ISBN);
+
                 java.sql.Date releaseDate = null;
                 if(releaseDateString != null) {
                     releaseDate = new java.sql.Date(sdf.parse(releaseDateString).getTime());
@@ -58,11 +65,17 @@ public class V2__BookMigrationUtil extends BaseJavaMigration {
                                 "BookName, " +
                                 "coverpicture, " +
                                 "author, " +
+                                "short_description, " +
+                                "isbn, " +
+                                "category, " +
                                 "releaseDate )" +
-                                " values(?, ?, ?, ?)",
+                                " values(?, ?, ?, ?, ?, ?, ?)",
                         name,
                         coverPicture,
                         author,
+                        shortDescription,
+                        isbn,
+                        category,
                         releaseDate);
             }
         }
@@ -90,7 +103,12 @@ public class V2__BookMigrationUtil extends BaseJavaMigration {
             Map<String, String> book = new HashMap<>();
             book.put(BOOK_NAME, (String) responseObject.get("title"));
             List<String> authors = (List<String>) responseObject.get("authors");
+            List<String> categories = (List<String>) responseObject.get("categories");
             book.put(BOOK_AUTHOR, authors != null ? authors.get(0) : null);
+            book.put(BOOK_SHORT_DESCRIPTION,(String) responseObject.get("shortDescription"));
+            book.put(BOOK_ISBN, (String) responseObject.get("isbn"));
+            book.put(BOOK_CATEGORY, categories != null && !categories.isEmpty() ? categories.get(0) : null);
+
             Map<String, String> publishedDateMap = (Map<String, String>) responseObject.get("publishedDate");
             if(publishedDateMap != null) {
                 book.put(BOOK_PUBLISHED_DATE, publishedDateMap.get("$date"));

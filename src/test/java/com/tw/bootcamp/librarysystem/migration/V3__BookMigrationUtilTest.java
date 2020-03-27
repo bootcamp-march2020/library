@@ -1,7 +1,7 @@
 package com.tw.bootcamp.librarysystem.migration;
 
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
-import db.migration.V2__BookMigrationUtil;
+import db.migration.V3__BookMigrationUtil;
 import org.flywaydb.core.api.migration.Context;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,17 +17,14 @@ import org.springframework.web.client.RestTemplate;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class V2__BookMigrationUtilTest {
+public class V3__BookMigrationUtilTest {
 
     @Autowired
     private DataSource dataSource;
@@ -37,14 +34,14 @@ public class V2__BookMigrationUtilTest {
 
     private Connection testDBConnection;
 
-    private V2__BookMigrationUtil bookMigrationUtil;
+    private V3__BookMigrationUtil bookMigrationUtil;
 
     private RestTemplate mockRestTemplate;
 
     @BeforeEach
     public void setup() throws SQLException {
         mockRestTemplate = Mockito.mock(RestTemplate.class);
-        bookMigrationUtil = new V2__BookMigrationUtil(mockRestTemplate);
+        bookMigrationUtil = new V3__BookMigrationUtil(mockRestTemplate);
         testDBConnection = dataSource.getConnection();
     }
 
@@ -70,18 +67,21 @@ public class V2__BookMigrationUtilTest {
         Map<String, Object> book1 = new HashMap<>();
         book1.put("title", "Book1");
         book1.put("thumbnailUrl", "Book1Thumbnail");
-        book1.put("authors", new ArrayList<String>());
-        ((List)book1.get("authors")).add("Book1Author");
+        book1.put("isbn", "123456789");
+        book1.put("shortDescription", "shortdescription");
+        book1.put("authors",Arrays.asList("author1"));
         book1.put("publishedDate", new HashMap<String, String>());
+        book1.put("category",Arrays.asList("action","drama"));
         ((Map)book1.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
         books.add(book1);
 
         Map<String, Object> book2 = new HashMap<>();
         book2.put("title", "Book2");
+        book2.put("isbn", "23455678");
+        book2.put("shortDescription", "BookShortDescription");
         book2.put("thumbnailUrl", "Book2Thumbnail");
-        book2.put("authors", new ArrayList<String>());
-        ((List)book2.get("authors")).add("Book2Author");
-        ((List)book2.get("authors")).add("Book3Author");
+        book2.put("authors",Arrays.asList("author2","author3"));
+        book2.put("category",Arrays.asList("fiction","horror"));
         book2.put("publishedDate", new HashMap<String, String>());
         ((Map)book2.get("publishedDate")).put("date", "2009-04-01T00:00:00.000-0700");
         books.add(book2);
