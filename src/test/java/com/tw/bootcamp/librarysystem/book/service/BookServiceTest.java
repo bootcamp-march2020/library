@@ -3,6 +3,8 @@ package com.tw.bootcamp.librarysystem.book.service;
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
+import com.tw.bootcamp.librarysystem.book.repository.BookSpecification;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
@@ -14,7 +16,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -26,16 +30,27 @@ public class BookServiceTest {
 
     private BookService bookService;
 
-    @Test
-    public void testGetBooks() {
-        Book someBook = new Book();
-        someBook.setId(1);
-        someBook.setName("android");
+    private Book androidBook;
+
+    @BeforeEach
+    public void setup(){
         bookRepository = mock(BookRepository.class);
         bookService = new BookService(bookRepository);
-        given(bookRepository.findAll())
-                .willReturn(Arrays.asList(someBook));
 
+        androidBook = new Book();
+        androidBook.setId(1);
+        androidBook.setName("android");
+
+        Book anotherBook = new Book();
+        anotherBook.setId(2);
+        anotherBook.setName("Web");
+
+        given(bookRepository.findAll())
+                .willReturn(Arrays.asList(androidBook, anotherBook));
+    }
+
+    @Test
+    public void testGetBooks() {
         List<Book> books = bookService.getBooks();
         assert (!books.isEmpty());
         assert (books.get(0).getName().equals("android"));
@@ -73,5 +88,21 @@ public class BookServiceTest {
 
         BookNotFoundException exception = assertThrows(BookNotFoundException.class, () -> bookService.getBookDetail(1));
         assertTrue(exception.getMessage().equals("Book Id requested is not present."));
+    }
+
+    @Test
+    public void testSearchBooks() {
+        given(bookRepository.findAll((BookSpecification) any()))
+                .willReturn(Arrays.asList(androidBook));
+        List<Book> books = bookService.searchBooks("mockAuthor", "mockName", "mockCategory");
+        assertEquals(1, books.size());
+    }
+
+    @Test
+    public void testSearchBooksWithNullParams() {
+        given(bookRepository.findAll((BookSpecification) any()))
+                .willReturn(Arrays.asList(androidBook));
+        List<Book> books = bookService.searchBooks(null, null, null);
+        assertEquals(2, books.size());
     }
 }
