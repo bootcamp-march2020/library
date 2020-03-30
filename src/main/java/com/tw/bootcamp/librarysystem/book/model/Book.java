@@ -10,6 +10,7 @@ import java.util.Date;
 @Entity
 @Table(name = "Book")
 @JsonInclude(Include.NON_NULL)
+//TODO: Remove setters.
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

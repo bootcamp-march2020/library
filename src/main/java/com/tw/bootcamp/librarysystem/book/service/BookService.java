@@ -15,6 +15,7 @@ import java.util.List;
 public class BookService {
     private final BookRepository bookRepository;
 
+    //TODO : either use autowired or constructor - Consistency
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
@@ -29,6 +30,10 @@ public class BookService {
     }
 
     public List<Book> searchBooks(String author, String bookName, String category) {
+        /**
+         * TODO: "Long parameter list" - Code Smells
+         * Solution : Create a parameter object
+         */
         List<BookSpecification> specifications = new ArrayList<>();
         if (author != null) {
             specifications.add(new BookSpecification(new SearchCriteria("author", author)));

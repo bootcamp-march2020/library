@@ -37,6 +37,9 @@ public class BookServiceTest {
         bookRepository = mock(BookRepository.class);
         bookService = new BookService(bookRepository);
 
+        /**
+         * TODO : Prefer constructor over setter
+         */
         androidBook = new Book();
         androidBook.setId(1);
         androidBook.setName("android");
@@ -52,6 +55,9 @@ public class BookServiceTest {
     @Test
     public void whenGetBookListShouldReturnBookList() {
         List<Book> books = bookService.getBooks();
+        /**
+         * TODO : Use assertFalse and assertEquals
+         */
         assert (!books.isEmpty());
         assert (books.get(0).getName().equals("android"));
     }
@@ -61,6 +67,9 @@ public class BookServiceTest {
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String dateString = "2001-07-04T12:08:56.235-0700";
         Date expectedReleaseDate = df1.parse(dateString);
+        /**
+         * TODO : Prefer constructor over setter
+         */
         Book expectedBook = new Book();
         expectedBook.setId(1);
         expectedBook.setName("Android in Action, Second Edition");
@@ -87,6 +96,9 @@ public class BookServiceTest {
                 .willThrow(new BookNotFoundException());
 
         BookNotFoundException exception = assertThrows(BookNotFoundException.class, () -> bookService.getBookDetail(1));
+        /**
+         * TODO : Can use assert equal
+         */
         assertTrue(exception.getMessage().equals("Book Id requested is not present."));
     }
 
