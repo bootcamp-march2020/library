@@ -34,10 +34,10 @@ public class BookService {
             specifications.add(new BookSpecification(new SearchCriteria("author", author)));
         }
         if (bookName != null) {
-            specifications.add(new BookSpecification(new SearchCriteria("bookname", bookName)));
+            specifications.add(new BookSpecification(new SearchCriteria("name", bookName)));
         }
         if (category != null) {
-            specifications.add(new BookSpecification(new SearchCriteria("category", author)));
+            specifications.add(new BookSpecification(new SearchCriteria("category", category)));
         }
         if (!specifications.isEmpty()) {
             Specification result = specifications.get(0);

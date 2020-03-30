@@ -38,7 +38,7 @@ public class BookControllerTest {
     public void testGetBooksEndpoint() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setBookName("android");
+        someBook.setName("android");
         given(bookService.getBooks())
                 .willReturn(Arrays.asList(someBook));
 
@@ -46,7 +46,7 @@ public class BookControllerTest {
         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].bookName").value("android"));
+                .andExpect(jsonPath("$[0].name").value("android"));
     }
 
 
@@ -57,7 +57,7 @@ public class BookControllerTest {
     }
 
     @Test
-    public void testBookDetaisForGivenId() throws Exception {
+    public void testBookDetailsForGivenId() throws Exception {
 
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String dateString = "2001-07-04T12:08:56.235-0700";
@@ -66,7 +66,7 @@ public class BookControllerTest {
 
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setBookName("Android in Action, Second Edition");
+        someBook.setName("Android in Action, Second Edition");
         someBook.setReleaseDate(expectedReleaseDate);
         someBook.setAuthor("W. Frank Ableson");
 
@@ -75,7 +75,7 @@ public class BookControllerTest {
 
         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("bookName", is("Android in Action, Second Edition")))
+                .andExpect(jsonPath("name", is("Android in Action, Second Edition")))
                 .andExpect(jsonPath("author", is("W. Frank Ableson")))
                 .andExpect(jsonPath("releaseDate", is(expectedDateString)));
 
@@ -90,6 +90,21 @@ public class BookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("message", is("Book Id requested is not present.")));
 
+    }
+
+    @Test
+    public void testSearchBooksEndpoint() throws Exception {
+        Book someBook = new Book();
+        someBook.setId(1);
+        someBook.setName("android");
+        given(bookService.searchBooks(any(), any(), any()))
+                .willReturn(Arrays.asList(someBook));
+
+
+        bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/search?author=&name=android&category="))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].name").value("android"));
     }
 
 

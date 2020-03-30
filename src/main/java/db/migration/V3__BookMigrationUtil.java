@@ -62,7 +62,7 @@ public class V3__BookMigrationUtil extends BaseJavaMigration {
                 }
                 jdbcTemplate.update(
                         "insert into book(" +
-                                "BookName, " +
+                                "name, " +
                                 "coverpicture, " +
                                 "author, " +
                                 "short_description, " +
