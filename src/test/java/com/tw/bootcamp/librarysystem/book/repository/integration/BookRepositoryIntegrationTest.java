@@ -1,4 +1,4 @@
-package com.tw.bootcamp.librarysystem.repository.integration;
+package com.tw.bootcamp.librarysystem.book.repository.integration;
 
 import com.tw.bootcamp.librarysystem.book.model.Book;
 import com.tw.bootcamp.librarysystem.book.model.SearchCriteria;
@@ -28,7 +28,7 @@ public class BookRepositoryIntegrationTest {
     @Test
     public void findBookWithBookNameAndAuthorName() {
         BookSpecification spec1 =
-                new BookSpecification(new SearchCriteria("bookName", "my book"));
+                new BookSpecification(new SearchCriteria("name", "my book"));
         BookSpecification spec2 =
                 new BookSpecification(new SearchCriteria("author", "author"));
         List<Book> results = bookRepository.findAll(Specification.where(spec1).and(spec2));

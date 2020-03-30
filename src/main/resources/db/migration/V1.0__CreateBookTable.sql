@@ -1,1 +1,1 @@
-CREATE TABLE book(id SERIAL PRIMARY KEY, bookName VARCHAR (300) NOT NULL, coverPicture VARCHAR (300), releaseDate DATE, author VARCHAR (300));
+CREATE TABLE book(id SERIAL PRIMARY KEY, name VARCHAR (300) NOT NULL, coverPicture VARCHAR (300), releaseDate DATE, author VARCHAR (300));

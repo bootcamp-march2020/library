@@ -39,11 +39,11 @@ public class BookServiceTest {
 
         androidBook = new Book();
         androidBook.setId(1);
-        androidBook.setBookName("android");
+        androidBook.setName("android");
 
         Book anotherBook = new Book();
         anotherBook.setId(2);
-        anotherBook.setBookName("Web");
+        anotherBook.setName("Web");
 
         given(bookRepository.findAll())
                 .willReturn(Arrays.asList(androidBook, anotherBook));
@@ -53,7 +53,7 @@ public class BookServiceTest {
     public void whenGetBookListShouldReturnBookList() {
         List<Book> books = bookService.getBooks();
         assert (!books.isEmpty());
-        assert (books.get(0).getBookName().equals("android"));
+        assert (books.get(0).getName().equals("android"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public class BookServiceTest {
         Date expectedReleaseDate = df1.parse(dateString);
         Book expectedBook = new Book();
         expectedBook.setId(1);
-        expectedBook.setBookName("Android in Action, Second Edition");
+        expectedBook.setName("Android in Action, Second Edition");
         expectedBook.setReleaseDate(expectedReleaseDate);
         expectedBook.setAuthor("W. Frank Ableson");
 
@@ -74,7 +74,7 @@ public class BookServiceTest {
 
         Book book = bookService.getBookDetail(1);
         assertEquals(expectedBook.getAuthor(), book.getAuthor());
-        assertEquals(expectedBook.getBookName(), book.getBookName());
+        assertEquals(expectedBook.getName(), book.getName());
         assertEquals(expectedBook.getReleaseDate(), book.getReleaseDate());
         assertEquals(expectedBook.getId(), book.getId());
     }

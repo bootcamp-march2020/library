@@ -40,7 +40,7 @@ public class BookControllerTest {
     public void shouldReturnBookList() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setBookName("android");
+        someBook.setName("android");
         given(bookService.getBooks())
                 .willReturn(Arrays.asList(someBook));
 
@@ -48,7 +48,7 @@ public class BookControllerTest {
         bookControllerMock.perform(MockMvcRequestBuilders.get(BASE_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].bookName").value("android"));
+                .andExpect(jsonPath("$[0].name").value("android"));
     }
 
 
@@ -68,7 +68,7 @@ public class BookControllerTest {
 
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setBookName("Android in Action, Second Edition");
+        someBook.setName("Android in Action, Second Edition");
         someBook.setReleaseDate(expectedReleaseDate);
         someBook.setAuthor("W. Frank Ableson");
         someBook.setShortDescription(null);
@@ -78,7 +78,7 @@ public class BookControllerTest {
 
         bookControllerMock.perform(MockMvcRequestBuilders.get(BASE_URL+"/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("bookName", is("Android in Action, Second Edition")))
+                .andExpect(jsonPath("name", is("Android in Action, Second Edition")))
                 .andExpect(jsonPath("author", is("W. Frank Ableson")))
                 .andExpect(jsonPath("releaseDate", is(expectedDateString)))
                 .andExpect(jsonPath("shortDescription").doesNotExist());
@@ -99,7 +99,7 @@ public class BookControllerTest {
     public void testSearchBooksEndpoint() throws Exception {
         Book someBook = new Book();
         someBook.setId(1);
-        someBook.setBookName("android");
+        someBook.setName("android");
         given(bookService.searchBooks(any(), any(), any()))
                 .willReturn(Arrays.asList(someBook));
 
@@ -107,7 +107,7 @@ public class BookControllerTest {
         bookControllerMock.perform(MockMvcRequestBuilders.get(BASE_URL+"/search?author=&name=android&category="))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].bookName").value("android"));
+                .andExpect(jsonPath("$[0].name").value("android"));
     }
 
 
