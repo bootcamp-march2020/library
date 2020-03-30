@@ -50,14 +50,14 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testGetBooks() {
+    public void whenGetBookListShouldReturnBookList() {
         List<Book> books = bookService.getBooks();
         assert (!books.isEmpty());
         assert (books.get(0).getBookName().equals("android"));
     }
 
     @Test
-    public void testGetBookDetail() throws Exception {
+    public void whenValidBookIdShouldReturnBookDetail() throws Exception {
         DateFormat df1 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
         String dateString = "2001-07-04T12:08:56.235-0700";
         Date expectedReleaseDate = df1.parse(dateString);
@@ -80,7 +80,7 @@ public class BookServiceTest {
     }
 
     @Test
-    public void testGetBookDetailForInvalidId() {
+    public void whenInvalidBookIdShouldThrowBookNotFoundException() {
         bookRepository = mock(BookRepository.class);
         bookService = new BookService(bookRepository);
         given(bookRepository.findById(any()))
