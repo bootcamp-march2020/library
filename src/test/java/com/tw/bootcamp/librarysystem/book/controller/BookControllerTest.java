@@ -87,9 +87,24 @@ public class BookControllerTest {
                 .willThrow(new BookNotFoundException());
 
         bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/1222"))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("message", is("Book Id requested is not present.")));
 
+    }
+
+    @Test
+    public void testSearchBooksEndpoint() throws Exception {
+        Book someBook = new Book();
+        someBook.setId(1);
+        someBook.setBookName("android");
+        given(bookService.searchBooks(any(), any(), any()))
+                .willReturn(Arrays.asList(someBook));
+
+
+        bookControllerMock.perform(MockMvcRequestBuilders.get("/library-system/books/search?author=&name=android&category="))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id", is(1)))
+                .andExpect(jsonPath("$[0].bookName").value("android"));
     }
 
 
