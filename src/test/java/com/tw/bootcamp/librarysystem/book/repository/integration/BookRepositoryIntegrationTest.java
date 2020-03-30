@@ -20,13 +20,7 @@ public class BookRepositoryIntegrationTest {
     private BookRepository bookRepository;
 
     @Test
-    public void findAllTest() {
-        assertEquals(1, bookRepository.findAll().size());
-
-    }
-
-    @Test
-    public void findBookWithBookNameAndAuthorName() {
+    public void findBookWithBookNameAndAuthorNameTest() {
         BookSpecification spec1 =
                 new BookSpecification(new SearchCriteria("name", "my book"));
         BookSpecification spec2 =

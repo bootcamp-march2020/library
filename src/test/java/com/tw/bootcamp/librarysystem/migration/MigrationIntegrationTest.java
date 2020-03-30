@@ -1,6 +1,8 @@
 package com.tw.bootcamp.librarysystem.migration;
 
+import com.tw.bootcamp.librarysystem.book.model.PriceCategory;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
+import com.tw.bootcamp.librarysystem.book.repository.PriceCategoryRepository;
 import db.migration.V3__BookMigrationUtil;
 import org.flywaydb.core.api.migration.Context;
 import org.junit.Assert;
@@ -20,17 +22,21 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-public class V3__BookMigrationUtilTest {
+public class MigrationIntegrationTest {
 
     @Autowired
     private DataSource dataSource;
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private PriceCategoryRepository priceCategoryRepository;
 
     private Connection testDBConnection;
 
@@ -46,7 +52,7 @@ public class V3__BookMigrationUtilTest {
     }
 
     @Test
-    public void migrateTest() throws Exception {
+    public void migrateBooksTest() throws Exception {
         Context mockFlywayContext = Mockito.mock(Context.class);
         List<Map<String, Object>> sampleBooks = getSampleBooks();
 
@@ -58,8 +64,14 @@ public class V3__BookMigrationUtilTest {
 
         bookMigrationUtil.migrate(mockFlywayContext);
         List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getName()).collect(Collectors.toList());
-        Assert.assertTrue(bookNames.contains("Book1"));
-        Assert.assertTrue(bookNames.contains("Book2"));
+        assertTrue(bookNames.contains("Book1"));
+        assertTrue(bookNames.contains("Book2"));
+    }
+
+    @Test
+    public void priceCategoryDatasetupTest() {
+        List<PriceCategory> priceCategories = priceCategoryRepository.findAll();
+        assertTrue(priceCategories.size() == 2);
     }
 
     @SuppressWarnings("unchecked")
