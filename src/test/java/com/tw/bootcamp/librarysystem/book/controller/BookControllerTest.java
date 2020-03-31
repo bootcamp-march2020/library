@@ -2,6 +2,7 @@ package com.tw.bootcamp.librarysystem.book.controller;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
 import com.tw.bootcamp.librarysystem.book.service.BookService;
 import com.tw.bootcamp.librarysystem.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BookController.class)
 public class BookControllerTest {
 
-    //@Autowired
     private MockMvc bookControllerMock;
 
     @MockBean
@@ -128,7 +128,7 @@ public class BookControllerTest {
         Book someBook = new Book();
         someBook.setId(1);
         someBook.setName("android");
-        given(bookService.searchBooks(any(), any(), any()))
+        given(bookService.searchBooks(any(BookSearchParameter.class)))
                 .willReturn(Arrays.asList(someBook));
 
 

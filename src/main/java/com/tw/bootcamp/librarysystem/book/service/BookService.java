@@ -2,11 +2,13 @@ package com.tw.bootcamp.librarysystem.book.service;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
 import com.tw.bootcamp.librarysystem.book.model.SearchCriteria;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import com.tw.bootcamp.librarysystem.book.repository.BookSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +30,16 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException());
     }
 
-    public List<Book> searchBooks(String author, String bookName, String category) {
+    public List<Book> searchBooks(BookSearchParameter bookSearchParameter) {
         List<BookSpecification> specifications = new ArrayList<>();
-        if (author != null) {
-            specifications.add(new BookSpecification(new SearchCriteria("author", author)));
+        if (!StringUtils.isEmpty(bookSearchParameter.getAuthor()) ) {
+            specifications.add(new BookSpecification(new SearchCriteria("author", bookSearchParameter.getAuthor())));
         }
-        if (bookName != null) {
-            specifications.add(new BookSpecification(new SearchCriteria("name", bookName)));
+        if (!StringUtils.isEmpty(bookSearchParameter.getBookName())) {
+            specifications.add(new BookSpecification(new SearchCriteria("name", bookSearchParameter.getBookName())));
         }
-        if (category != null) {
-            specifications.add(new BookSpecification(new SearchCriteria("category", category)));
+        if (!StringUtils.isEmpty(bookSearchParameter.getCategory())) {
+            specifications.add(new BookSpecification(new SearchCriteria("category", bookSearchParameter.getCategory())));
         }
         if (!specifications.isEmpty()) {
             Specification result = specifications.get(0);
