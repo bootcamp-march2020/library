@@ -1,11 +1,12 @@
 package com.tw.bootcamp.librarysystem.migration;
 
+import com.tw.bootcamp.librarysystem.book.model.Book;
 import com.tw.bootcamp.librarysystem.book.model.PriceCategory;
+import com.tw.bootcamp.librarysystem.book.model.PriceInfo;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
-import com.tw.bootcamp.librarysystem.book.repository.PriceCategoryRepository;
-import db.migration.V3__BookMigrationUtil;
+import com.tw.bootcamp.librarysystem.book.repository.PriceInfoRepository;
+import db.migration.V5__BookMigrationUtil;
 import org.flywaydb.core.api.migration.Context;
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -36,18 +37,18 @@ public class MigrationIntegrationTest {
     private BookRepository bookRepository;
 
     @Autowired
-    private PriceCategoryRepository priceCategoryRepository;
+    private PriceInfoRepository priceInfoRepository;
 
     private Connection testDBConnection;
 
-    private V3__BookMigrationUtil bookMigrationUtil;
+    private V5__BookMigrationUtil bookMigrationUtil;
 
     private RestTemplate mockRestTemplate;
 
     @BeforeEach
     public void setup() throws SQLException {
         mockRestTemplate = Mockito.mock(RestTemplate.class);
-        bookMigrationUtil = new V3__BookMigrationUtil(mockRestTemplate);
+        bookMigrationUtil = new V5__BookMigrationUtil(mockRestTemplate);
         testDBConnection = dataSource.getConnection();
     }
 
@@ -63,14 +64,17 @@ public class MigrationIntegrationTest {
                 .thenReturn(ResponseEntity.accepted().body(sampleBooks));
 
         bookMigrationUtil.migrate(mockFlywayContext);
-        List<String> bookNames = bookRepository.findAll().stream().map(book -> book.getName()).collect(Collectors.toList());
+        List<Book> books = bookRepository.findAll();
+        List<String> bookNames = books.stream().map(book -> book.getName()).collect(Collectors.toList());
+        List<String> priceCategories = books.stream().map(book -> book.getPriceInfo().getPricingCategory()).collect(Collectors.toList());
+        assertTrue(priceCategories.contains(PriceCategory.DEFAULT.name()));
         assertTrue(bookNames.contains("Book1"));
         assertTrue(bookNames.contains("Book2"));
     }
 
     @Test
     public void priceCategoryDatasetupTest() {
-        List<PriceCategory> priceCategories = priceCategoryRepository.findAll();
+        List<PriceInfo> priceCategories = priceInfoRepository.findAll();
         assertTrue(priceCategories.size() == 2);
     }
 
@@ -82,6 +86,7 @@ public class MigrationIntegrationTest {
         book1.put("thumbnailUrl", "Book1Thumbnail");
         book1.put("isbn", "123456789");
         book1.put("shortDescription", "shortdescription");
+        book1.put("priceCategory", PriceCategory.DEFAULT.name());
         book1.put("authors", Arrays.asList("author1"));
         book1.put("publishedDate", new HashMap<String, String>());
         book1.put("category", Arrays.asList("action", "drama"));
@@ -93,6 +98,7 @@ public class MigrationIntegrationTest {
         book2.put("isbn", "23455678");
         book2.put("shortDescription", "BookShortDescription");
         book2.put("thumbnailUrl", "Book2Thumbnail");
+        book2.put("priceCategory", PriceCategory.DEFAULT.name());
         book2.put("authors", Arrays.asList("author2", "author3"));
         book2.put("category", Arrays.asList("fiction", "horror"));
         book2.put("publishedDate", new HashMap<String, String>());

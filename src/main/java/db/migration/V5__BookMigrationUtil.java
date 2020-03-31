@@ -1,5 +1,7 @@
 package db.migration;
 
+import com.tw.bootcamp.librarysystem.book.model.PriceCategory;
+import com.tw.bootcamp.librarysystem.book.model.PriceInfo;
 import org.flywaydb.core.api.migration.BaseJavaMigration;
 import org.flywaydb.core.api.migration.Context;
 import org.springframework.core.ParameterizedTypeReference;
@@ -17,7 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class V3__BookMigrationUtil extends BaseJavaMigration {
+public class V5__BookMigrationUtil extends BaseJavaMigration {
 
     private static final String BOOK_NAME = "BookName";
     private static final String BOOK_AUTHOR = "BookAuthor";
@@ -26,13 +28,14 @@ public class V3__BookMigrationUtil extends BaseJavaMigration {
     private static final String BOOK_SHORT_DESCRIPTION = "BookShortDescription";
     private static final String BOOK_ISBN = "BookIsbn";
     private static final String BOOK_CATEGORY = "Bookcategory";
+    private static final String BOOK_PRICING_CATEGORY = "BookPricingCategory";
     private RestTemplate restTemplate;
 
-    public V3__BookMigrationUtil() {
+    public V5__BookMigrationUtil() {
         this.restTemplate = new RestTemplate();
     }
 
-    public V3__BookMigrationUtil(RestTemplate restTemplate) {
+    public V5__BookMigrationUtil(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
@@ -44,10 +47,10 @@ public class V3__BookMigrationUtil extends BaseJavaMigration {
 
     private void insertIntoDatabase(Context context, List<Map<String, String>> books) throws ParseException {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(new SingleConnectionDataSource(context.getConnection(), true));
-        if(books != null) {
+        if (books != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-            for(Map<String, String> book: books) {
+            for (Map<String, String> book : books) {
                 String name = book.get(BOOK_NAME);
                 String author = book.get(BOOK_AUTHOR);
                 String coverPicture = book.get(BOOK_THUMBNAIL_URL);
@@ -55,22 +58,25 @@ public class V3__BookMigrationUtil extends BaseJavaMigration {
                 String category = book.get(BOOK_CATEGORY);
                 String shortDescription = book.get(BOOK_SHORT_DESCRIPTION);
                 String isbn = book.get(BOOK_ISBN);
+                String pricingCategory = book.get(BOOK_PRICING_CATEGORY);
 
                 java.sql.Date releaseDate = null;
-                if(releaseDateString != null) {
+                if (releaseDateString != null) {
                     releaseDate = new java.sql.Date(sdf.parse(releaseDateString).getTime());
                 }
                 jdbcTemplate.update(
                         "insert into book(" +
                                 "name, " +
+                                "pricing_category, " +
                                 "coverpicture, " +
                                 "author, " +
                                 "short_description, " +
                                 "isbn, " +
                                 "category, " +
                                 "releaseDate )" +
-                                " values(?, ?, ?, ?, ?, ?, ?)",
+                                " values(?, ?, ?, ?, ?, ?, ?, ?)",
                         name,
+                        pricingCategory,
                         coverPicture,
                         author,
                         shortDescription,
@@ -93,29 +99,39 @@ public class V3__BookMigrationUtil extends BaseJavaMigration {
 
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.TEXT_PLAIN));
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.ALL));
         messageConverters.add(converter);
         restTemplate.setMessageConverters(messageConverters);
-        List<Map<String, Object>> responseObjects =  this.restTemplate.exchange(url, HttpMethod.GET, null,
-                new ParameterizedTypeReference<List>() {}).getBody();
+        List<Map<String, Object>> responseObjects = this.restTemplate.exchange(url, HttpMethod.GET, null,
+                new ParameterizedTypeReference<List>() {
+                }).getBody();
 
-        for(Map<String, Object> responseObject: responseObjects) {
+        for (Map<String, Object> responseObject : responseObjects) {
             Map<String, String> book = new HashMap<>();
             book.put(BOOK_NAME, (String) responseObject.get("title"));
             List<String> authors = (List<String>) responseObject.get("authors");
             List<String> categories = (List<String>) responseObject.get("categories");
             book.put(BOOK_AUTHOR, authors != null ? authors.get(0) : null);
-            book.put(BOOK_SHORT_DESCRIPTION,(String) responseObject.get("shortDescription"));
+            book.put(BOOK_SHORT_DESCRIPTION, (String) responseObject.get("shortDescription"));
             book.put(BOOK_ISBN, (String) responseObject.get("isbn"));
+            book.put(BOOK_PRICING_CATEGORY, fetchPricingCategory((String) responseObject.get("priceCategory")));
             book.put(BOOK_CATEGORY, categories != null && !categories.isEmpty() ? categories.get(0) : null);
 
             Map<String, String> publishedDateMap = (Map<String, String>) responseObject.get("publishedDate");
-            if(publishedDateMap != null) {
+            if (publishedDateMap != null) {
                 book.put(BOOK_PUBLISHED_DATE, publishedDateMap.get("$date"));
             }
             book.put(BOOK_THUMBNAIL_URL, (String) responseObject.get("thumbnailUrl"));
             books.add(book);
         }
         return books;
+    }
+
+    private String fetchPricingCategory(String priceCategory) {
+        for (PriceCategory category : PriceCategory.values()) {
+            if (priceCategory != null && category.name().equalsIgnoreCase(priceCategory))
+                return category.name();
+        }
+        return PriceCategory.DEFAULT.name();
     }
 }

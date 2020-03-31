@@ -1,0 +1,1 @@
+INSERT INTO book(id, name, coverPicture, author, pricing_category) values (1, 'my book', 'http://someurl.com', 'author', 'DEFAULT');
