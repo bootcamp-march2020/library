@@ -2,7 +2,6 @@ package com.tw.bootcamp.librarysystem.book.service;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
-import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
 import com.tw.bootcamp.librarysystem.book.model.SearchCriteria;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import com.tw.bootcamp.librarysystem.book.repository.BookSpecification;
@@ -12,6 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -30,17 +30,10 @@ public class BookService {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException());
     }
 
-    public List<Book> searchBooks(BookSearchParameter bookSearchParameter) {
-        List<BookSpecification> specifications = new ArrayList<>();
-        if (!StringUtils.isEmpty(bookSearchParameter.getAuthor()) ) {
-            specifications.add(new BookSpecification(new SearchCriteria("author", bookSearchParameter.getAuthor())));
-        }
-        if (!StringUtils.isEmpty(bookSearchParameter.getBookName())) {
-            specifications.add(new BookSpecification(new SearchCriteria("name", bookSearchParameter.getBookName())));
-        }
-        if (!StringUtils.isEmpty(bookSearchParameter.getCategory())) {
-            specifications.add(new BookSpecification(new SearchCriteria("category", bookSearchParameter.getCategory())));
-        }
+    public List<Book> searchBooks(List<SearchCriteria> bookSearchParameter) {
+        List<BookSpecification> specifications = bookSearchParameter.stream()
+                .map(searchCriteria -> new BookSpecification(searchCriteria))
+                .collect(Collectors.toList());
         if (!specifications.isEmpty()) {
             Specification result = specifications.get(0);
             for (int i = 1; i < specifications.size(); i++) {

@@ -1,10 +1,7 @@
 package com.tw.bootcamp.librarysystem.book.controller;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
-import com.tw.bootcamp.librarysystem.book.model.Book;
-import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
-import com.tw.bootcamp.librarysystem.book.model.PriceCategory;
-import com.tw.bootcamp.librarysystem.book.model.PriceInfo;
+import com.tw.bootcamp.librarysystem.book.model.*;
 import com.tw.bootcamp.librarysystem.book.service.BookService;
 import com.tw.bootcamp.librarysystem.util.DateUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -145,7 +143,7 @@ public class BookControllerTest {
         Book someBook = new Book();
         someBook.setId(1);
         someBook.setName("android");
-        given(bookService.searchBooks(any(BookSearchParameter.class)))
+        given(bookService.searchBooks(any(List.class)))
                 .willReturn(Arrays.asList(someBook));
 
 

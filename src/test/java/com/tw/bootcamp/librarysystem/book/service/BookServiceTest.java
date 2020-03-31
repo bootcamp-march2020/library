@@ -2,7 +2,8 @@ package com.tw.bootcamp.librarysystem.book.service;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
-import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
+import com.tw.bootcamp.librarysystem.book.model.BookSearchKey;
+import com.tw.bootcamp.librarysystem.book.model.SearchCriteria;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import com.tw.bootcamp.librarysystem.book.repository.BookSpecification;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,10 +13,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -95,15 +93,21 @@ public class BookServiceTest {
     public void testSearchBooks() {
         given(bookRepository.findAll((BookSpecification) any()))
                 .willReturn(Arrays.asList(androidBook));
-        List<Book> books = bookService.searchBooks(new BookSearchParameter("mockAuthor", "mockName", "mockCategory"));
+        List criteria = new ArrayList();
+        criteria.add(new SearchCriteria(BookSearchKey.AUTHOR.getName(), "Author1"));
+        criteria.add(new SearchCriteria(BookSearchKey.CATEGORY.getName(), "Web"));
+        List<Book> books = bookService.searchBooks(criteria);
         assertEquals(1, books.size());
     }
 
     @Test
-    public void testSearchBooksWithNullParams() {
-        given(bookRepository.findAll((BookSpecification) any()))
-                .willReturn(Arrays.asList(androidBook));
-        List<Book> books = bookService.searchBooks(new BookSearchParameter(null, null, null));
+    public void testSearchBooksWithNoParams() {
+        Book anotherBook = new Book();
+        anotherBook.setId(2);
+        anotherBook.setName("Web");
+        given(bookRepository.findAll())
+                .willReturn(Arrays.asList(androidBook, anotherBook));
+        List<Book> books = bookService.searchBooks(new ArrayList<>());
         assertEquals(2, books.size());
     }
 }
