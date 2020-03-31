@@ -6,7 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "PRICE_INFO")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PriceInfo {
 
     @Id
