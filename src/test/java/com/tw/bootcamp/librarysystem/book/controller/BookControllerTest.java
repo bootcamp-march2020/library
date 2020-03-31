@@ -2,6 +2,8 @@ package com.tw.bootcamp.librarysystem.book.controller;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.PriceCategory;
+import com.tw.bootcamp.librarysystem.book.model.PriceInfo;
 import com.tw.bootcamp.librarysystem.book.service.BookService;
 import com.tw.bootcamp.librarysystem.util.DateUtil;
 import org.junit.jupiter.api.Test;
@@ -41,6 +43,9 @@ public class BookControllerTest {
         Book someBook = new Book();
         someBook.setId(1);
         someBook.setName("android");
+        PriceInfo priceInfo = new PriceInfo();
+        priceInfo.setPricingCategory(PriceCategory.DEFAULT.name());
+        someBook.setPriceInfo(priceInfo);
         given(bookService.getBooks())
                 .willReturn(Arrays.asList(someBook));
 
@@ -48,7 +53,8 @@ public class BookControllerTest {
         bookControllerMock.perform(MockMvcRequestBuilders.get(BASE_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].name").value("android"));
+                .andExpect(jsonPath("$[0].name").value("android"))
+                .andExpect(jsonPath("$[0].priceInfo.pricingCategory").value(PriceCategory.DEFAULT.name()));
     }
 
 
@@ -72,7 +78,9 @@ public class BookControllerTest {
         someBook.setReleaseDate(expectedReleaseDate);
         someBook.setAuthor("W. Frank Ableson");
         someBook.setShortDescription(null);
-
+        PriceInfo priceInfo = new PriceInfo();
+        priceInfo.setPricingCategory(PriceCategory.DEFAULT.name());
+        someBook.setPriceInfo(priceInfo);
         given(bookService.getBookDetail(any()))
                 .willReturn(someBook);
 
@@ -81,8 +89,8 @@ public class BookControllerTest {
                 .andExpect(jsonPath("name", is("Android in Action, Second Edition")))
                 .andExpect(jsonPath("author", is("W. Frank Ableson")))
                 .andExpect(jsonPath("releaseDate", is(expectedDateString)))
-                .andExpect(jsonPath("shortDescription").doesNotExist());
-
+                .andExpect(jsonPath("shortDescription").doesNotExist())
+                .andExpect(jsonPath("priceInfo.pricingCategory", is(PriceCategory.DEFAULT.name())));
     }
 
     @Test

@@ -1,1 +1,0 @@
-INSERT INTO book(id, name, coverPicture, author) values (1, 'my book', 'http://someurl.com', 'author');
