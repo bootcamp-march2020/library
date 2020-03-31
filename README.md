@@ -6,6 +6,7 @@ This repository corresponds to the Library System that will be built by Team A a
 - Java 11
 - Spring boot
 - Postgre Database
+- Google Oauth 2 authentication
 
 Installing PostGres with Homebrew
 https://gist.github.com/ibraheem4/ce5ccd3e4d7a65589ce84f2a3b7c23a3

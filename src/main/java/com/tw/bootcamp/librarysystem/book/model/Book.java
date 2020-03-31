@@ -37,6 +37,10 @@ public class Book {
     @Column(name = "category")
     private String category;
 
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="pricing_category")
+    private PriceInfo priceInfo;
+
     public String getCoverPicture() {
         return coverPicture;
     }
@@ -99,5 +103,13 @@ public class Book {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public PriceInfo getPriceInfo() {
+        return priceInfo;
+    }
+
+    public void setPriceInfo(PriceInfo priceInfo) {
+        this.priceInfo = priceInfo;
     }
 }

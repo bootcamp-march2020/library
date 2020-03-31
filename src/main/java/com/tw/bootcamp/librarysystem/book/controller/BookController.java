@@ -1,8 +1,8 @@
 package com.tw.bootcamp.librarysystem.book.controller;
 
 import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
 import com.tw.bootcamp.librarysystem.book.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,14 +15,13 @@ import java.util.List;
 @RequestMapping("/books")
 public class BookController {
 
-    @Autowired
-    BookService bookService;
+    private final BookService bookService;
 
-    /**
-     * Get all books Api
-     *
-     * @return List<Book> list of books
-     */
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+
     @GetMapping({"", "/"})
     public List<Book> getAllBooks() {
         return bookService.getBooks();
@@ -39,7 +38,7 @@ public class BookController {
                                   @RequestParam(value = "name", required = false) String bookName,
                                   @RequestParam(value = "category", required = false) String category) {
 
-        return bookService.searchBooks(author, bookName, category);
+        return bookService.searchBooks(new BookSearchParameter(author, bookName, category) );
 
 
     }
