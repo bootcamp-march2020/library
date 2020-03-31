@@ -25,6 +25,7 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly('com.h2database:h2')
 	testImplementation 'junit:junit:4.12'
+	compile('org.modelmapper:modelmapper:1.1.0')
 }
 
 test {
