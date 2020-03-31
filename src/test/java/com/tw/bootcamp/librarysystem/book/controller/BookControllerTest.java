@@ -27,6 +27,7 @@ import java.util.Date;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -85,6 +86,14 @@ public class BookControllerTest {
     @Test
     @WithMockUser(username = "testuser")
     public void testBookDetailEndpointShouldReturnSuccessStatus() throws Exception {
+        Book someBook = new Book();
+        someBook.setId(1);
+        someBook.setName("android");
+        PriceInfo priceInfo = new PriceInfo();
+        priceInfo.setPricingCategory(PriceCategory.DEFAULT.name());
+        someBook.setPriceInfo(priceInfo);
+        given(bookService.getBookDetail(anyInt()))
+                .willReturn(someBook);
         bookControllerMock.perform(MockMvcRequestBuilders.get(BASE_URL+"/1"))
                 .andExpect(status().isOk());
     }
