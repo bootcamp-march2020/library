@@ -29,12 +29,7 @@ public class BookController {
 
     @Autowired
     ModelMapper modelMapper;
-
-    /**
-     * Get all books Api
-     *
-     * @return List<Book> list of books
-     */
+    
     @JsonView(Views.List.class)
     @GetMapping({"", "/"})
     public List<BookDTO> getAllBooks() {

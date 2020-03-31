@@ -1,4 +1,4 @@
-package com.tw.bootcamp.librarysystem.book.service;
+package com.tw.bootcamp.librarysystem.auth;
 
 import com.tw.bootcamp.librarysystem.auth.service.AuthService;
 import com.tw.bootcamp.librarysystem.book.model.User;
