@@ -2,6 +2,7 @@ package com.tw.bootcamp.librarysystem.book.service;
 
 import com.tw.bootcamp.librarysystem.book.exception.BookNotFoundException;
 import com.tw.bootcamp.librarysystem.book.model.Book;
+import com.tw.bootcamp.librarysystem.book.model.BookSearchParameter;
 import com.tw.bootcamp.librarysystem.book.repository.BookRepository;
 import com.tw.bootcamp.librarysystem.book.repository.BookSpecification;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,8 +53,8 @@ public class BookServiceTest {
     @Test
     public void whenGetBookListShouldReturnBookList() {
         List<Book> books = bookService.getBooks();
-        assert (!books.isEmpty());
-        assert (books.get(0).getName().equals("android"));
+        assertFalse (books.isEmpty());
+        assertEquals (books.get(0).getName(),"android");
     }
 
     @Test
@@ -87,14 +88,14 @@ public class BookServiceTest {
                 .willThrow(new BookNotFoundException());
 
         BookNotFoundException exception = assertThrows(BookNotFoundException.class, () -> bookService.getBookDetail(1));
-        assertTrue(exception.getMessage().equals("Book Id requested is not present."));
+        assertEquals(exception.getMessage(),"Book Id requested is not present.");
     }
 
     @Test
     public void testSearchBooks() {
         given(bookRepository.findAll((BookSpecification) any()))
                 .willReturn(Arrays.asList(androidBook));
-        List<Book> books = bookService.searchBooks("mockAuthor", "mockName", "mockCategory");
+        List<Book> books = bookService.searchBooks(new BookSearchParameter("mockAuthor", "mockName", "mockCategory"));
         assertEquals(1, books.size());
     }
 
@@ -102,7 +103,7 @@ public class BookServiceTest {
     public void testSearchBooksWithNullParams() {
         given(bookRepository.findAll((BookSpecification) any()))
                 .willReturn(Arrays.asList(androidBook));
-        List<Book> books = bookService.searchBooks(null, null, null);
+        List<Book> books = bookService.searchBooks(new BookSearchParameter(null, null, null));
         assertEquals(2, books.size());
     }
 }
