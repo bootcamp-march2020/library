@@ -1,9 +1,12 @@
 package com.tw.bootcamp.librarysystem.book.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "PRICE_INFO")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class PriceInfo {
 
     @Id
