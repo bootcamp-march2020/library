@@ -95,7 +95,7 @@ public class V5__BookMigrationUtil extends BaseJavaMigration {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
         properties.load(inputStream);
 
-        String url = (String) properties.get("isbn_books_api_url");
+        String url = (String) properties.get("isbn.books.api.url");
 
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();

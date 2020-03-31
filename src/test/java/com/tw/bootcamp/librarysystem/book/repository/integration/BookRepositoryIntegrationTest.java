@@ -20,7 +20,7 @@ import static org.junit.Assert.assertThat;
 public class BookRepositoryIntegrationTest {
     @Autowired
     private BookRepository bookRepository;
-    
+
 
     @Test
     public void findBookWithBookNameAndAuthorNameTest() {
